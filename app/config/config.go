@@ -1,7 +1,9 @@
 package config
 
 import (
+	"flag"
 	"log"
+	"macus/database"
 	"path/filepath"
 
 	"github.com/spf13/viper"
@@ -33,4 +35,33 @@ func relativePath(basedir string, path *string) {
 
 func GetConfig() *viper.Viper {
 	return config
+}
+
+func GetDBConfig() database.Config {
+	var port, dbhost, dbschema, dbusername, dbpassword, disableTLS string
+	var dbport int
+	flag.StringVar(&port, "port", "8080", "port for open service")
+	flag.StringVar(&dbhost, "dbhost", "144.126.140.118", "database host name")
+	flag.IntVar(&dbport, "dbport", 5432, "database port")
+	flag.StringVar(&dbschema, "dbschema", "customers", "database schema name")
+	flag.StringVar(&dbusername, "dbusername", "postgres", "database user name")
+	flag.StringVar(&dbpassword, "dbpassword", "Ld4t5555", "database password")
+	flag.StringVar(&disableTLS, "disableTLS", "Y", "database disableTLS[Y/n]")
+	flag.Parse()
+	var databaseTSL bool
+	if disableTLS == "n" {
+		databaseTSL = false
+	} else {
+		databaseTSL = true
+	}
+	dbConfig := database.Config{
+		User:       dbusername,
+		Password:   dbpassword,
+		Host:       dbhost,
+		Port:       dbport,
+		Name:       dbschema,
+		DisableTLS: databaseTSL,
+	}
+
+	return dbConfig
 }

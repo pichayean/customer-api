@@ -13,7 +13,21 @@ import (
 )
 
 type CustomerHandler struct {
-	CustomerDB database.CustomerDB
+	CustomerDB database.CustomerRepository
+}
+
+func (h CustomerHandler) RegisterApi(engine *gin.Engine) {
+	v1 := engine.Group("/api/v1")
+	{
+		customers := v1.Group("/customers")
+		{
+			customers.GET(":id", h.GetCustomer)
+			customers.GET("", h.ListCustomers)
+			customers.POST("", h.CreateCustomer)
+			customers.DELETE(":id", h.DeleteCustomer)
+			customers.PATCH(":id", h.UpdateCustomer)
+		}
+	}
 }
 
 // GetCustomer godoc

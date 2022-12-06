@@ -13,6 +13,6 @@ import (
 // @produce plain
 // @response 200 {string} string "OK"
 // @router /healthcheck [get]
-func HealthCheckHandler(c *gin.Context) {
+func HealthCheck(c *gin.Context) {
 	c.String(http.StatusOK, "OK")
 }

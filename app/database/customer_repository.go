@@ -8,7 +8,7 @@ import (
 	"github.com/jmoiron/sqlx"
 )
 
-type CustomerDB interface {
+type CustomerRepository interface {
 	GetCustomerByID(id string) (CustomerEntity, error)
 	CreateNewCustomer(newCustomer CustomerEntity, now time.Time) (CustomerEntity, error)
 	ListCustomer() ([]CustomerEntity, error)
