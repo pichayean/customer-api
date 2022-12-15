@@ -34,7 +34,6 @@ func main() {
 		log.Fatal("connecting database fail", err)
 	}
 	engine := gin.Default()
-
 	handler.AddAPIs(db, engine)
 	handler.AddSwagger(engine)
 	log.Fatal((engine.Run(":8080")))
