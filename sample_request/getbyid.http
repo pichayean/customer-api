@@ -1,0 +1,4 @@
+@base_url=http://localhost:8080
+
+GET {{base_url}}/api/v1/customers/a7b73210-e483-4bcf-972b-03a63b9a6145
+Content-Type: application/json

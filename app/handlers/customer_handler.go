@@ -1,4 +1,4 @@
-package handler
+package handlers
 
 import (
 	"fmt"
@@ -13,7 +13,12 @@ import (
 )
 
 type CustomerHandler struct {
-	CustomerDB database.CustomerRepository
+	customerRepository database.CustomerRepository
+}
+
+func NewCustomerHandler(db database.DbProvider) *CustomerHandler {
+	repo := database.NewCustomerRepository(db)
+	return &CustomerHandler{customerRepository: *repo}
 }
 
 func (h CustomerHandler) RegisterApi(engine *gin.Engine) {
@@ -56,7 +61,7 @@ func (h CustomerHandler) GetCustomer(c *gin.Context) {
 	// 	DB: h.DB,
 	// }
 	// customer, err := management.GetCustomerByID(customerID)
-	customer, err := h.CustomerDB.GetCustomerByID(customerID)
+	customer, err := h.customerRepository.GetCustomerByID(customerID)
 	if err != nil {
 		fmt.Println("Handlers GetProductByID error: ", err)
 		c.Status(http.StatusInternalServerError)
@@ -123,7 +128,7 @@ func (h CustomerHandler) CreateCustomer(c *gin.Context) {
 	// 	DB: h.DB,
 	// }
 	// newItemp, err := management.CreateNewCustomer(customerEntity, time.Now())
-	newItemp, err := h.CustomerDB.CreateNewCustomer(customerEntity, time.Now())
+	newItemp, err := h.customerRepository.CreateNewCustomer(customerEntity, time.Now())
 	if err != nil {
 		fmt.Println("Handlers CreateNewProduct error: ", err)
 		c.Status(http.StatusInternalServerError)

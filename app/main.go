@@ -3,12 +3,13 @@ package main
 import (
 	"log"
 
-	"macus/config"
 	"macus/database"
 	_ "macus/docs"
-	"macus/handler"
+	"macus/handlers"
 
 	"github.com/gin-gonic/gin"
+	"gorm.io/driver/postgres"
+	"gorm.io/gorm"
 )
 
 // @title Customers API
@@ -29,13 +30,23 @@ import (
 // @in header
 // @name Authorization
 func main() {
-	db, err := database.Open(config.GetDBConfig())
+	// db, err := database.Open(config.GetDBConfig())
+	// if err != nil {
+	// 	log.Fatal("connecting database fail", err)
+	// }
+	dsn := "host=144.126.140.118 user=postgres password=Ld4t5555 dbname=postgres port=5432 sslmode=disable TimeZone=Asia/Shanghai"
+
+	db, err := gorm.Open(postgres.Open(dsn), &gorm.Config{})
+	// db, err := gorm.Open(postgres.Open(os.Getenv("DB_CONN")), &gorm.Config{})
 	if err != nil {
-		log.Fatal("connecting database fail", err)
+		panic("failed to connect database")
 	}
+
+	db.AutoMigrate(&database.CustomerEntity{})
 	engine := gin.Default()
-	handler.AddAPIs(db, engine)
-	handler.AddSwagger(engine)
+	gormStore := database.NewGormStore(db)
+	handlers.AddAPIs(gormStore, engine)
+	handlers.AddSwagger(engine)
 	log.Fatal((engine.Run(":8080")))
 }
 

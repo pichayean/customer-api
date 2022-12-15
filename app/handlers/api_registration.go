@@ -1,4 +1,4 @@
-package handler
+package handlers
 
 import (
 	"fmt"
@@ -10,17 +10,12 @@ import (
 
 	"github.com/gin-gonic/gin"
 	"github.com/golang-jwt/jwt"
-	"github.com/jmoiron/sqlx"
 	ginSwagger "github.com/swaggo/gin-swagger"
 	"github.com/swaggo/gin-swagger/swaggerFiles"
 )
 
-func AddAPIs(db *sqlx.DB, engine *gin.Engine) {
-	customersHandler := CustomerHandler{
-		CustomerDB: database.PostgresDB{
-			DB: db,
-		},
-	}
+func AddAPIs(db *database.GormStore, engine *gin.Engine) {
+	customersHandler := NewCustomerHandler(db)
 	customersV1 := engine.Group("/api/v1")
 	{
 		customers := customersV1.Group("/customers")
