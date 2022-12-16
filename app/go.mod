@@ -16,6 +16,7 @@ require (
 	github.com/google/uuid v1.3.0
 	github.com/jacobsngoodwin/memrizr/account v0.0.0-20210312173458-3999c5b64d9e
 	github.com/jmoiron/sqlx v1.3.5
+	github.com/joho/godotenv v1.4.0
 	github.com/lib/pq v1.10.7
 	github.com/spf13/viper v1.14.0
 	github.com/swaggo/gin-swagger v1.3.0

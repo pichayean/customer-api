@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"net/http"
 
-	"macus/model"
+	"macus/models"
 	"macus/services"
 
 	"github.com/gin-gonic/gin"
@@ -25,7 +25,7 @@ func (h AuthenHandler) RegisterApi(engine *gin.Engine) {
 }
 
 func (h AuthenHandler) LogIn(c *gin.Context) {
-	var login model.LogIn
+	var login models.LogIn
 	if err := c.ShouldBindJSON(&login); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"errors": err.Error()})
 		c.Abort()
@@ -40,6 +40,7 @@ func (h AuthenHandler) LogIn(c *gin.Context) {
 	}
 	fmt.Println("HEre")
 	c.JSON(http.StatusOK, accessToken)
+
 	// token := jwt.NewWithClaims(jwt.SigningMethodHS256, &jwt.StandardClaims{
 	// 	Id:        login.UserName,
 	// 	ExpiresAt: time.Now().Add(5 * time.Minute).Unix(),

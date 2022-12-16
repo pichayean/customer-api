@@ -2,15 +2,14 @@ package services
 
 import (
 	"crypto/rsa"
-	"fmt"
 	"log"
 	"macus/common"
-	"macus/model"
-	"macus/model/apperrors"
+	"macus/models"
+	"macus/models/apperrors"
 )
 
 type TokenService interface {
-	NewToken(u *model.LogIn) (*model.TokenPair, error)
+	NewToken(u *models.LogIn) (*models.TokenPair, error)
 }
 
 type tokenService struct {
@@ -33,20 +32,15 @@ func NewTokenService(c *TSConfig) TokenService {
 	}
 }
 
-func (s *tokenService) NewToken(u *model.LogIn) (*model.TokenPair, error) {
-
-	fmt.Println("sss")
-	fmt.Println(s.PrivKey)
+func (s *tokenService) NewToken(u *models.LogIn) (*models.TokenPair, error) {
 	idToken, err := common.GenerateIDToken(&u.UserName, s.PrivKey, s.IDExpirationSecs)
-
-	fmt.Println("sss")
 	if err != nil {
 		log.Printf("Error generating idToken for uname: %v. Error: %v\n", u.UserName, err.Error())
 		return nil, apperrors.NewInternal()
 	}
 
-	return &model.TokenPair{
-		IDToken: model.IDToken{SS: idToken},
+	return &models.TokenPair{
+		IDToken: models.IDToken{SS: idToken},
 	}, nil
 }
 

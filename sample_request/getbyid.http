@@ -1,4 +1,4 @@
-@base_url=http://localhost:8080
+@base_url=http://localhost:8081
 
-GET {{base_url}}/api/v1/customers/a7b73210-e483-4bcf-972b-03a63b9a6145
+GET {{base_url}}/api/v1/customers/614e80ca-8faa-48b9-8a4d-2e61a4d0bb38
 Content-Type: application/json

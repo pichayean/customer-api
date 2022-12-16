@@ -1,21 +1,20 @@
-package handlers
+package router
 
 import (
 	"fmt"
 	"io/ioutil"
-	"macus/database"
+	"macus/data"
+	"macus/handlers"
 	"macus/middlewares"
 	"macus/services"
 	"strconv"
 
 	"github.com/gin-gonic/gin"
 	"github.com/golang-jwt/jwt"
-	ginSwagger "github.com/swaggo/gin-swagger"
-	"github.com/swaggo/gin-swagger/swaggerFiles"
 )
 
-func AddAPIs(db *database.GormStore, engine *gin.Engine) {
-	customersHandler := NewCustomerHandler(db)
+func AddAPIs(db *data.GormProvider, engine *gin.Engine) {
+	customersHandler := handlers.NewCustomerHandler(db)
 	customersV1 := engine.Group("/api/v1")
 	{
 		customers := customersV1.Group("/customers")
@@ -28,7 +27,6 @@ func AddAPIs(db *database.GormStore, engine *gin.Engine) {
 		}
 	}
 	// load rsa keys
-
 	// privKeyFile := os.Getenv("PRIV_KEY_FILE")
 	privKeyFile := "./config/rsa_private.pem"
 	priv, err := ioutil.ReadFile(privKeyFile)
@@ -59,7 +57,7 @@ func AddAPIs(db *database.GormStore, engine *gin.Engine) {
 		fmt.Println("could not parse ID_TOKEN_EXP as int: %w", err)
 	}
 
-	authenHandler := AuthenHandler{
+	authenHandler := handlers.AuthenHandler{
 		TokenService: services.NewTokenService(&services.TSConfig{
 			PrivKey:          privKey,
 			PubKey:           pubKey,
@@ -74,9 +72,5 @@ func AddAPIs(db *database.GormStore, engine *gin.Engine) {
 		}
 	}
 
-	engine.GET("/healthcheck", HealthCheck)
-}
-
-func AddSwagger(engine *gin.Engine) {
-	engine.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
+	engine.GET("/healthcheck", handlers.HealthCheck)
 }

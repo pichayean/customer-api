@@ -1,4 +1,4 @@
-package model
+package models
 
 type LogIn struct {
 	UserName string `json:"username" binding:"required"`

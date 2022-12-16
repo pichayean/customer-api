@@ -1,4 +1,4 @@
-package model
+package models
 
 // IDToken stores token properties that
 // are accessed in multiple application layers
