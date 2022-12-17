@@ -23,7 +23,7 @@ func main() {
 
 	db.AutoMigrate(&entities.CustomerEntity{})
 	engine := gin.Default()
-	gormStore := data.NewGormProvider(db)
+	gormStore := data.NewGormProvider[entities.CustomerEntity](db)
 	router.AddAPIs(gormStore, engine)
 	log.Fatal((engine.Run(":" + os.Getenv("PORT"))))
 }

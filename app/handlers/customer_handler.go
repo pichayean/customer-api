@@ -18,7 +18,7 @@ type CustomerHandler struct {
 	customerRepository services.CustomerService
 }
 
-func NewCustomerHandler(db data.DbProvider) *CustomerHandler {
+func NewCustomerHandler(db data.DbProvider[entities.CustomerEntity]) *CustomerHandler {
 	repo := services.NewCustomerRepository(db)
 	return &CustomerHandler{customerRepository: repo}
 }

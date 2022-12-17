@@ -6,44 +6,37 @@ import (
 	"gorm.io/gorm"
 )
 
-// type DbProvider interface {
-// 	Create(*entities.CustomerEntity) error
-// 	Get() ([]entities.CustomerEntity, error)
-// 	GetById(id string) (entities.CustomerEntity, error)
-// 	Update(*entities.CustomerEntity) error
-// }
-
-type GormProvider struct {
+type GormProvider[T any] struct {
 	db *gorm.DB
 }
 
-func NewGormProvider(db *gorm.DB) *GormProvider {
-	return &GormProvider{db: db}
+func NewGormProvider[T any](db *gorm.DB) *GormProvider[T] {
+	return &GormProvider[T]{db: db}
 }
 
-func (s *GormProvider) Create(customer *entities.CustomerEntity) error {
+func (s *GormProvider[T]) Create(customer *T) error {
 	return s.db.Create(customer).Error
 }
 
-func (s *GormProvider) Get() ([]entities.CustomerEntity, error) {
-	var customers []entities.CustomerEntity
-	result := s.db.Find(&customers)
+func (s *GormProvider[T]) Get() ([]T, error) {
+	var entity []T
+	result := s.db.Find(&entity)
 	if result.Error != nil {
 		return nil, result.Error
 	}
-	return customers, nil
+	return entity, nil
 }
 
-func (s *GormProvider) GetById(id string) (entities.CustomerEntity, error) {
-	var customer entities.CustomerEntity
-	result := s.db.First(&customer, "id = ?", id)
+func (s *GormProvider[T]) GetById(id string) (T, error) {
+	var entity T
+	result := s.db.First(&entity, "id = ?", id)
 	if result.Error != nil {
-		return entities.CustomerEntity{}, result.Error
+		return entity, result.Error
 	}
-	return customer, nil
+	return entity, nil
 }
 
-func (s *GormProvider) Update(customer *entities.CustomerEntity) error {
+func (s *GormProvider[T]) Update(customer *entities.CustomerEntity) error {
 	return s.db.Save(&customer).Error
 
 }

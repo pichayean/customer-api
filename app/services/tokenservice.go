@@ -8,6 +8,12 @@ import (
 	"macus/models/apperrors"
 )
 
+type TSConfig struct {
+	PrivKey          *rsa.PrivateKey
+	PubKey           *rsa.PublicKey
+	IDExpirationSecs int64
+}
+
 type TokenService interface {
 	NewToken(u *models.LogIn) (*models.TokenPair, error)
 }
@@ -18,13 +24,7 @@ type tokenService struct {
 	IDExpirationSecs int64
 }
 
-type TSConfig struct {
-	PrivKey          *rsa.PrivateKey
-	PubKey           *rsa.PublicKey
-	IDExpirationSecs int64
-}
-
-func NewTokenService(c *TSConfig) TokenService {
+func NewTokenService(c *TSConfig) *tokenService {
 	return &tokenService{
 		PrivKey:          c.PrivKey,
 		PubKey:           c.PubKey,

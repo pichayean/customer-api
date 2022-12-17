@@ -16,10 +16,10 @@ type CustomerService interface {
 }
 
 type customerRepository struct {
-	provider data.DbProvider
+	provider data.DbProvider[entities.CustomerEntity]
 }
 
-func NewCustomerRepository(p data.DbProvider) *customerRepository {
+func NewCustomerRepository(p data.DbProvider[entities.CustomerEntity]) *customerRepository {
 	return &customerRepository{provider: p}
 }
 
